@@ -15,11 +15,11 @@ class ChatController < ApplicationController
     render json: { reply: reply }
   rescue ActionController::ParameterMissing => e
     render json: { error: e.message }, status: :bad_request
-  rescue Anthropic::RateLimitError
+  rescue Anthropic::Errors::RateLimitError
     render json: { error: "Claude rate limit reached" }, status: :too_many_requests
-  rescue Anthropic::AuthenticationError
+  rescue Anthropic::Errors::AuthenticationError
     render json: { error: "Invalid or revoked Anthropic API key" }, status: :unauthorized
-  rescue Anthropic::APIError => e
+  rescue Anthropic::Errors::APIError => e
     render json: { error: e.message }, status: :bad_gateway
   end
 end
